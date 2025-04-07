@@ -3,6 +3,7 @@ package cl.moises.springcloud.msitem.services;
 import cl.moises.springcloud.msitem.client.ProductoFeignClient;
 import cl.moises.springcloud.msitem.dto.ProductoDTO;
 import cl.moises.springcloud.msitem.models.Item;
+import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,11 +32,12 @@ public class ItemServiceFeign implements ItemService {
 
     @Override
     public Optional<Item> findById(Long id) {
-        ProductoDTO productoDTO = productoFeignClient.findById(id);
-        if (productoDTO == null) {
+        try {
+            ProductoDTO productoDTO = productoFeignClient.findById(id);
+            return Optional.of(new Item(productoDTO, new Random().nextInt(10) + 1));
+        } catch (FeignException e) {
             return Optional.empty();
         }
-        return Optional.of(new Item(productoDTO, new Random().nextInt(10) + 1));
     }
 
 }

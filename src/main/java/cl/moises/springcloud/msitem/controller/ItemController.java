@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +28,12 @@ public class ItemController {
     }
 
     @GetMapping("/item/{id}")
-    public ResponseEntity<Item> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Item> itemOptional = itemService.findById(id);
         if (itemOptional.isPresent()) {
             return ResponseEntity.ok().body(itemOptional.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(404).body(Collections.singletonMap("message", "Item not found"));
     }
 
 }
