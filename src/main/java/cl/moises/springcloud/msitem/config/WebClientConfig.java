@@ -11,7 +11,7 @@ public class WebClientConfig {
     @Bean
     @LoadBalanced
     WebClient.Builder webClient() {
-        return WebClient.builder();
+        return WebClient.builder().baseUrl("http://ms-productos/api/v1");
     }
 
 }

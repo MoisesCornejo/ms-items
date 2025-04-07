@@ -25,7 +25,7 @@ public class ItemServiceWebClient implements ItemService {
         // Construye un cliente WebClient y realiza una solicitud GET a la URI "http://ms-productos"
         return this.clientBuilder.build()
                 .get()
-                .uri("http://ms-productos/api/v1/items")
+                .uri("/productos")
                 // Establece el tipo de contenido aceptado como JSON
                 .accept(MediaType.APPLICATION_JSON)
                 // Recupera la respuesta y la convierte en un flujo de objetos Item
@@ -48,7 +48,7 @@ public class ItemServiceWebClient implements ItemService {
             return Optional.ofNullable(clientBuilder.build()
                     .get()
                     // Inserta el parámetro "id" en la URI
-                    .uri("http://ms-productos/api/v1/producto/{id}", params)
+                    .uri("/producto/{id}", params)
                     // Establece el tipo de contenido aceptado como JSON
                     .accept(MediaType.APPLICATION_JSON)
                     // Recupera la respuesta y la convierte en un objeto
