@@ -13,5 +13,6 @@ public class ProductoDTO {
     private String nombre;
     private Double precio;
     private LocalDate creado;
+    private int port;
 
 }
