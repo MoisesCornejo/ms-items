@@ -1,17 +1,16 @@
 package cl.moises.springcloud.msitem.services;
 
+import cl.moises.springcloud.msitem.dto.ProductoDTO;
 import cl.moises.springcloud.msitem.models.Item;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-@Primary
+//@Primary
 @Service
 public class ItemServiceWebClient implements ItemService {
 
@@ -44,18 +43,26 @@ public class ItemServiceWebClient implements ItemService {
         Map<String, Long> params = new HashMap<>();
         params.put("id", id);
 
-        // Construye un cliente WebClient y realiza una solicitud GET a la URI "http://ms-productos"
-        return Optional.ofNullable(clientBuilder.build()
-                .get()
-                // Inserta el parámetro "id" en la URI
-                .uri("http://ms-productos/api/v1/item/{id}", params)
-                // Establece el tipo de contenido aceptado como JSON
-                .accept(MediaType.APPLICATION_JSON)
-                // Recupera la respuesta y la convierte en un objeto Item
-                .retrieve()
-                .bodyToMono(Item.class)
-                // Bloquea hasta que se complete la operación y devuelve el Item
-                .block());
+        try {
+            // Construye un cliente WebClient y realiza una solicitud GET a la URI "http://ms-productos"
+            return Optional.ofNullable(clientBuilder.build()
+                    .get()
+                    // Inserta el parámetro "id" en la URI
+                    .uri("http://ms-productos/api/v1/producto/{id}", params)
+                    // Establece el tipo de contenido aceptado como JSON
+                    .accept(MediaType.APPLICATION_JSON)
+                    // Recupera la respuesta y la convierte en un objeto
+                    .retrieve()
+                    .bodyToMono(ProductoDTO.class)
+                    .map(producto -> {
+                        return new Item(producto, new Random().nextInt(10) + 1);
+                    })
+                    // Bloquea hasta que se complete la operación y devuelve el Item
+                    .block());
+        } catch (WebClientResponseException e) {
+            return Optional.empty();
+        }
+
     }
 
 }
