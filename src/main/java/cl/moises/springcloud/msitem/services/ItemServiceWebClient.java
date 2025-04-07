@@ -28,9 +28,12 @@ public class ItemServiceWebClient implements ItemService {
                 .uri("/productos")
                 // Establece el tipo de contenido aceptado como JSON
                 .accept(MediaType.APPLICATION_JSON)
-                // Recupera la respuesta y la convierte en un flujo de objetos Item
+                // Recupera la respuesta y la convierte en un flujo de objetos
                 .retrieve()
-                .bodyToFlux(Item.class)
+                .bodyToFlux(ProductoDTO.class)
+                .map(producto -> {
+                    return new Item(producto, new Random().nextInt(10) + 1);
+                })
                 // Recoge todos los elementos del flujo en una lista
                 .collectList()
                 // Bloquea hasta que se complete la operación y devuelve la lista de Items
