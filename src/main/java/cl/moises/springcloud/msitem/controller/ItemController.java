@@ -4,10 +4,7 @@ import cl.moises.springcloud.msitem.models.Item;
 import cl.moises.springcloud.msitem.services.ItemService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +20,12 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    // Mostramos request enviado por ms-gateway-server
     @GetMapping("/items")
-    public ResponseEntity<List<Item>> findAll() {
+    public ResponseEntity<List<Item>> findAll(@RequestParam(name= "name", required = false) String name,
+                                              @RequestHeader(name = "token-request", required = false) String tokenRequest) {
+        System.out.println("Request name: " + name);
+        System.out.println("Request token: " + tokenRequest);
         return ResponseEntity.ok().body(itemService.findAll());
     }
 
